@@ -1,0 +1,13 @@
+[project]
+name = "astaa-store-worker"
+version = "0.1.0"
+description = "ASTAA store audit workflows worker"
+requires-python = ">=3.12"
+dependencies = ["mistralai-workflows[mistralai]>=3.10,<4"]
+
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
