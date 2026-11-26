@@ -516,7 +516,8 @@ function setCat(k){ activeCat = k; renderFilters(); renderGrid(); }
 function renderGrid(){
   const list = products.filter(p => activeCat==="all" || catOf(p.type)===activeCat);
   document.getElementById("grid").innerHTML = list.map((p,i) => {
-    const tags = p.compare_at_price ? `<span class="tag">SALE · ${Math.round((1-p.price/p.compare_at_price)*100)}% OFF</span>`
+    const onSale = p.compare_at_price && p.compare_at_price > p.price;
+    const tags = onSale ? `<span class="tag">SALE · ${Math.round((1-p.price/p.compare_at_price)*100)}% OFF</span>`
       : (i < 2 ? `<span class="tag">NEW</span>` : "");
     return `
     <div class="card" onclick="openPD(${products.indexOf(p)})">
@@ -526,7 +527,7 @@ function renderGrid(){
         <div class="stars">★★★★★ <small>ASTAA pick</small></div>
         <div class="price-row">
           <span class="price">${money(p.price)}</span>
-          ${p.compare_at_price?`<span class="old">${money(p.compare_at_price)}</span>`:""}
+          ${onSale?`<span class="old">${money(p.compare_at_price)}</span>`:""}
         </div>
         <button class="add-cart" onclick="event.stopPropagation();addToCart(${products.indexOf(p)},1)">ADD TO CART</button>
       </div>
@@ -545,7 +546,7 @@ function openPD(i){
     <div class="stars">★★★★★ <small>Loved by ASTAA customers</small></div>
     <div class="pd-price">
       <span class="price">${money(p.price)}</span>
-      ${p.compare_at_price?`<span class="old">${money(p.compare_at_price)}</span><span class="tag" style="position:static">SAVE ${money(p.compare_at_price-p.price)}</span>`:""}
+      ${p.compare_at_price>p.price?`<span class="old">${money(p.compare_at_price)}</span><span class="tag" style="position:static">SAVE ${money(p.compare_at_price-p.price)}</span>`:""}
     </div>
     <div class="pd-desc">${p.desc}</div>
     <div class="pd-spec">
