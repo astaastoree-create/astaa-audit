@@ -484,6 +484,21 @@
   .ig-tile:hover .ig-hov{opacity:1}
   #pdMain img{cursor:zoom-in}
   .thumb img{cursor:zoom-in}
+  .deal-img img{cursor:zoom-in}
+  .pd-main{position:relative}
+  .pd-main::after{content:"🔍 ZOOM";position:absolute;bottom:12px;right:12px;padding:6px 14px;border-radius:999px;
+    font-size:.64rem;letter-spacing:1.5px;font-weight:700;color:var(--ivory);
+    background:rgba(14,24,48,.55);border:1px solid rgba(191,224,255,.4);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);pointer-events:none}
+  .thumb::after{content:"🔍";position:absolute;bottom:10px;right:10px;width:26px;height:26px;
+    display:flex;align-items:center;justify-content:center;font-size:.85rem;border-radius:50%;
+    background:rgba(14,24,48,.5);border:1px solid rgba(191,224,255,.4);
+    backdrop-filter:blur(8px);pointer-events:none;z-index:2}
+  .deal-img{position:relative}
+  .deal-img::after{content:"🔍 ZOOM";position:absolute;bottom:12px;right:12px;padding:6px 14px;border-radius:999px;
+    font-size:.64rem;letter-spacing:1.5px;font-weight:700;color:var(--ivory);
+    background:rgba(14,24,48,.55);border:1px solid rgba(191,224,255,.4);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);pointer-events:none}
 </style>
 </head>
 <body>
@@ -872,7 +887,7 @@ function cardHTML(p, tag){
   const onSale = p.compare_at_price && p.compare_at_price > p.price;
   return `
   <div class="card glass" onclick="openPD(${i})">
-    <div class="thumb">${tag||""}${p.img?`<img src="${p.img}" alt="${p.title.replace(/"/g,"&quot;")}" loading="lazy" onclick="event.stopPropagation();openLightboxAt(${i},0)">`:`<div class="no-img">✦</div>`}</div>
+    <div class="thumb">${tag||""}${p.img?`<img src="${p.img}" alt="${p.title.replace(/"/g,"&quot;")}" loading="lazy" data-pi="${i}">`:`<div class="no-img">✦</div>`}</div>
     <div class="card-body">
       <h3>${p.title}</h3>
       <div class="stars">★★★★★ <small>ASTAA pick</small></div>
@@ -921,7 +936,7 @@ function renderDeal(){
   const i = products.indexOf(deal);
   const onSale = deal.compare_at_price && deal.compare_at_price > deal.price;
   document.getElementById("dealBox").innerHTML = `
-    <div class="deal-img">${deal.img?`<img src="${deal.img}" alt="${deal.title.replace(/"/g,"&quot;")}">`:`<div class="no-img">✦</div>`}</div>
+    <div class="deal-img">${deal.img?`<img src="${deal.img}" alt="${deal.title.replace(/"/g,"&quot;")}" data-pi="${i}">`:`<div class="no-img">✦</div>`}</div>
     <div class="deal-info">
       <div class="eyebrow" style="color:var(--ice);font-size:.72rem;letter-spacing:3px;text-transform:uppercase">⚡ Flash Deal — Today Only</div>
       <h3>${deal.title}</h3>
@@ -1002,7 +1017,7 @@ function selThumb(i){
   const p = products[pdIndex];
   const imgs = pdImages(p);
   document.getElementById("pdMain").innerHTML = imgs[i]
-    ? `<img src="${imgs[i]}" alt="${p.title.replace(/"/g,"&quot;")}" onclick="openLightbox(pdImgIdx)">`
+    ? `<img src="${imgs[i]}" alt="${p.title.replace(/"/g,"&quot;")}">`
     : `<div class="no-img" style="height:320px;border-radius:18px">✦</div>`;
   document.querySelectorAll("#pdThumbs .th").forEach((b,bi)=>b.classList.toggle("active", bi===i));
 }
@@ -1059,7 +1074,7 @@ function openPD(i){
     const vi = imgs.indexOf(firstAvail.img); if(vi>-1) pdImgIdx = vi;
   }
   document.getElementById("pdGallery").innerHTML = `
-    <div class="pd-main" id="pdMain">${imgs[pdImgIdx]?`<img src="${imgs[pdImgIdx]}" alt="${p.title.replace(/"/g,"&quot;")}" onclick="openLightbox(pdImgIdx)">`:`<div class="no-img" style="height:320px;border-radius:18px">✦</div>`}</div>
+    <div class="pd-main" id="pdMain">${imgs[pdImgIdx]?`<img src="${imgs[pdImgIdx]}" alt="${p.title.replace(/"/g,"&quot;")}">`:`<div class="no-img" style="height:320px;border-radius:18px">✦</div>`}</div>
     ${imgs.length>1?`<div class="pd-thumbs" id="pdThumbs">${imgs.map((s,si)=>`<button class="th ${si===pdImgIdx?"active":""}" onclick="selThumb(${si})"><img src="${s}" alt="" loading="lazy"></button>`).join("")}</div>`:""}`;
   document.getElementById("pdInfo").innerHTML = `
     <div class="eyebrow">${(CATS.find(c=>c.key===catOf(p.type))||{}).name||"ASTAA"}</div>
@@ -1226,6 +1241,16 @@ function showToastMsg(msg){
   t.innerHTML = msg;
   t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2200);
 }
+document.addEventListener("click", e => {
+  const t = e.target;
+  if(!t || t.tagName !== "IMG") return;
+  if(t.closest("#pdMain")){ e.stopPropagation(); openLightbox(pdImgIdx); return; }
+  const pi = t.getAttribute("data-pi");
+  if(pi !== null && (t.closest(".thumb") || t.closest(".deal-img"))){
+    e.stopPropagation();
+    openLightboxAt(parseInt(pi,10), 0);
+  }
+}, true);
 document.addEventListener("keydown", e => {
   if(e.key==="Escape") closeAll();
   if(document.getElementById("lightbox").classList.contains("open")){
