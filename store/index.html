@@ -366,6 +366,40 @@
     font-size:.84rem;letter-spacing:.4px;transition:background .2s}
   .mail-pill:hover{background:rgba(255,255,255,.24);color:#fff}
   @media(max-width:560px){.pd-main img{max-height:250px}.pd-thumbs .th{width:52px;height:52px}}
+
+  /* ===== MODAL MINI FOOTER ===== */
+  .pd-foot{margin-top:26px;padding-top:20px;border-top:1px dashed rgba(44,98,201,.3);
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+  .pf-brand{font-family:Georgia,serif;font-weight:700;letter-spacing:3px;color:var(--ink)}
+  .pf-brand em{font-style:normal;color:var(--ice-deep)}
+  .pf-links{display:flex;gap:14px;flex-wrap:wrap}
+  .pf-links a{font-size:.78rem;color:var(--muted);text-decoration:none;transition:color .2s}
+  .pf-links a:hover{color:var(--ice-deep)}
+  .pd-foot .mail-pill{margin-top:0;color:var(--ink);border-color:rgba(44,98,201,.4);background:rgba(255,255,255,.55)}
+  .pd-foot .mail-pill:hover{background:rgba(255,255,255,.8);color:#0e1830}
+
+  /* ===== IMAGE LIGHTBOX (click to zoom) ===== */
+  .lightbox{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;
+    background:rgba(4,10,28,.88);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+    opacity:0;pointer-events:none;transition:opacity .3s;cursor:zoom-out}
+  .lightbox.open{opacity:1;pointer-events:auto}
+  .lightbox img{max-width:92vw;max-height:86vh;object-fit:contain;border-radius:20px;
+    box-shadow:0 50px 140px rgba(0,0,0,.75)}
+  .lb-close{position:absolute;top:18px;right:22px;cursor:pointer;border:1px solid rgba(191,224,255,.4);
+    background:rgba(255,255,255,.14);color:var(--ivory);border-radius:50%;width:42px;height:42px;font-size:1.1rem;
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .lb-arrow{position:absolute;top:50%;transform:translateY(-50%);cursor:pointer;
+    border:1px solid rgba(191,224,255,.4);background:rgba(255,255,255,.14);color:var(--ivory);
+    border-radius:50%;width:48px;height:48px;font-size:1.5rem;line-height:1;
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:background .2s}
+  .lb-arrow:hover{background:rgba(255,255,255,.3)}
+  .lb-prev{left:16px}
+  .lb-next{right:16px}
+  .lb-count{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);
+    padding:7px 18px;border-radius:999px;font-size:.78rem;letter-spacing:1.5px;color:var(--ivory);
+    border:1px solid rgba(191,224,255,.35);background:rgba(255,255,255,.12);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  #pdMain img{cursor:zoom-in}
 </style>
 </head>
 <body>
@@ -561,6 +595,14 @@
   </div>
 </div>
 
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()">✕</button>
+  <button class="lb-arrow lb-prev" onclick="event.stopPropagation();lbNav(-1)">‹</button>
+  <img id="lbImg" src="" alt="">
+  <button class="lb-arrow lb-next" onclick="event.stopPropagation();lbNav(1)">›</button>
+  <div class="lb-count" id="lbCount"></div>
+</div>
+
 <div class="toast" id="toast">Added to cart <b>✦</b></div>
 
 <script>
@@ -721,7 +763,7 @@ function selThumb(i){
   const p = products[pdIndex];
   const imgs = pdImages(p);
   document.getElementById("pdMain").innerHTML = imgs[i]
-    ? `<img src="${imgs[i]}" alt="${p.title.replace(/"/g,"&quot;")}">`
+    ? `<img src="${imgs[i]}" alt="${p.title.replace(/"/g,"&quot;")}" onclick="openLightbox(pdImgIdx)">`
     : `<div class="no-img" style="height:320px;border-radius:18px">✦</div>`;
   document.querySelectorAll("#pdThumbs .th").forEach((b,bi)=>b.classList.toggle("active", bi===i));
 }
@@ -778,7 +820,7 @@ function openPD(i){
     const vi = imgs.indexOf(firstAvail.img); if(vi>-1) pdImgIdx = vi;
   }
   document.getElementById("pdGallery").innerHTML = `
-    <div class="pd-main" id="pdMain">${imgs[pdImgIdx]?`<img src="${imgs[pdImgIdx]}" alt="${p.title.replace(/"/g,"&quot;")}">`:`<div class="no-img" style="height:320px;border-radius:18px">✦</div>`}</div>
+    <div class="pd-main" id="pdMain">${imgs[pdImgIdx]?`<img src="${imgs[pdImgIdx]}" alt="${p.title.replace(/"/g,"&quot;")}" onclick="openLightbox(pdImgIdx)">`:`<div class="no-img" style="height:320px;border-radius:18px">✦</div>`}</div>
     ${imgs.length>1?`<div class="pd-thumbs" id="pdThumbs">${imgs.map((s,si)=>`<button class="th ${si===pdImgIdx?"active":""}" onclick="selThumb(${si})"><img src="${s}" alt="" loading="lazy"></button>`).join("")}</div>`:""}`;
   document.getElementById("pdInfo").innerHTML = `
     <div class="eyebrow">${(CATS.find(c=>c.key===catOf(p.type))||{}).name||"ASTAA"}</div>
@@ -800,7 +842,17 @@ function openPD(i){
       <button class="add-cart" id="pdAddBtn" onclick="addPDToCart()">ADD TO CART</button>
     </div>
     ${relatedHTML(i)}
-    <div class="pd-sub">🔒 Secure checkout on astaa.store — PayPal, mada &amp; major cards. You will confirm quantity and address in the final step.</div>`;
+    <div class="pd-sub">🔒 Secure checkout on astaa.store — PayPal, mada &amp; major cards. You will confirm quantity and address in the final step.</div>
+    <div class="pd-foot">
+      <div class="pf-brand">ASTA<em>A</em></div>
+      <div class="pf-links">
+        <a href="https://astaa.store/policies/shipping-policy" target="_blank">Shipping</a>
+        <a href="https://astaa.store/policies/refund-policy" target="_blank">Returns</a>
+        <a href="https://astaa.store/policies/privacy-policy" target="_blank">Privacy</a>
+        <a href="https://astaa.store/policies/terms-of-service" target="_blank">Terms of Service</a>
+      </div>
+      <a class="mail-pill" href="mailto:support@astaa.store">✉ support@astaa.store</a>
+    </div>`;
   renderPDSelects(p);
   document.getElementById("pdModal").classList.add("open");
   document.getElementById("overlay").classList.add("show");
@@ -890,6 +942,28 @@ function goCheckout(){
   }
 }
 
+let lbImgs = [], lbIdx = 0;
+function openLightbox(i){
+  lbImgs = pdImages(products[pdIndex]);
+  if(!lbImgs.length) return;
+  lbIdx = Math.max(0, Math.min(i, lbImgs.length-1));
+  renderLightbox();
+  document.getElementById("lightbox").classList.add("open");
+}
+function renderLightbox(){
+  document.getElementById("lbImg").src = lbImgs[lbIdx] || "";
+  document.getElementById("lbCount").textContent = (lbIdx+1) + " / " + lbImgs.length;
+  const many = lbImgs.length > 1;
+  document.querySelector(".lb-prev").style.display = many ? "" : "none";
+  document.querySelector(".lb-next").style.display = many ? "" : "none";
+}
+function lbNav(d){
+  if(!lbImgs.length) return;
+  lbIdx = (lbIdx + d + lbImgs.length) % lbImgs.length;
+  renderLightbox();
+}
+function closeLightbox(){ document.getElementById("lightbox").classList.remove("open"); }
+
 function openCart(){
   document.getElementById("cartDrawer").classList.add("open");
   document.getElementById("overlay").classList.add("show");
@@ -899,6 +973,7 @@ function closeAll(){
   document.getElementById("cartDrawer").classList.remove("open");
   document.getElementById("pdModal").classList.remove("open");
   document.getElementById("overlay").classList.remove("show");
+  closeLightbox();
 }
 function showToast(){
   const t = document.getElementById("toast");
@@ -910,7 +985,13 @@ function showToastMsg(msg){
   t.innerHTML = msg;
   t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2200);
 }
-document.addEventListener("keydown", e => { if(e.key==="Escape") closeAll(); });
+document.addEventListener("keydown", e => {
+  if(e.key==="Escape") closeAll();
+  if(document.getElementById("lightbox").classList.contains("open")){
+    if(e.key==="ArrowLeft") lbNav(-1);
+    if(e.key==="ArrowRight") lbNav(1);
+  }
+});
 
 restoreCart(); renderCart(); updateCount(); loadProducts();
 </script>
