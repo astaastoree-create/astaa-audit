@@ -3,8 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ASTAA — Crystal Ice Edition</title>
-<meta name="description" content="Curated fashion, beauty, gadgets and home essentials. Premium quality, worldwide shipping, secure checkout via Shopify.">
+<title>ASTAA — Curated Fashion, Beauty &amp; Home Essentials | Worldwide Shipping</title>
+<meta name="description" content="Shop ASTAA for curated fashion, beauty, gadgets and home essentials. Free delivery over $33, 20% off your first order with code ASTAA20. Secure checkout via PayPal, mada & cards.">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#0e1830">
+<link rel="canonical" href="https://astaastoree-create.github.io/astaa-audit/store/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E✦%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ASTAA">
+<meta property="og:title" content="ASTAA — Curated Fashion, Beauty & Home Essentials">
+<meta property="og:description" content="Premium quality essentials with worldwide shipping. Free delivery over $33 · 20% off with code ASTAA20.">
+<meta property="og:url" content="https://astaastoree-create.github.io/astaa-audit/store/">
+<meta property="og:image" content="https://cdn.shopify.com/s/files/1/0997/6850/0530/files/fed70cdc-6c09-43e6-9ecd-673960cb1d49.jpg?v=1795554141">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ASTAA — Curated Fashion, Beauty & Home Essentials">
+<meta name="twitter:description" content="Free delivery over $33 · 20% off your first order with code ASTAA20 · PayPal, mada & cards.">
+<meta name="twitter:image" content="https://cdn.shopify.com/s/files/1/0997/6850/0530/files/fed70cdc-6c09-43e6-9ecd-673960cb1d49.jpg?v=1795554141">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {"@type":"Organization","name":"ASTAA","url":"https://astaa.store","email":"support@astaa.store"},
+    {"@type":"WebSite","name":"ASTAA Store","url":"https://astaa.store","potentialAction":{"@type":"SearchAction","target":"https://astaa.store/search?q={search_term_string}","query-input":"required name=search_term_string"}},
+    {"@type":"ItemList","name":"ASTAA Featured Collection","itemListElement":[
+      {"@type":"ListItem","position":1,"name":"Half Face Mask Masquerade","url":"https://astaa.store/products/half-face-mask-masquerade"},
+      {"@type":"ListItem","position":2,"name":"Masquerade Carnival Party Half Face Mask","url":"https://astaa.store/products/masquerade-carnival-party-costume-props-half-face-mask"},
+      {"@type":"ListItem","position":3,"name":"Freckle Tattoo Sticker — Gold & Silver","url":"https://astaa.store/products/freckle-tattoo-sticker-hot-gold-and-silver"}
+    ]},
+    {"@type":"FAQPage","mainEntity":[
+      {"@type":"Question","name":"How long does shipping take?","acceptedAnswer":{"@type":"Answer","text":"Standard international delivery usually takes 7–15 business days, tracked to your door. Shipping is free on orders over $33."}},
+      {"@type":"Question","name":"Which payment methods do you accept?","acceptedAnswer":{"@type":"Answer","text":"We accept PayPal, mada and all major credit/debit cards through the secure Shopify checkout."}},
+      {"@type":"Question","name":"What is your return policy?","acceptedAnswer":{"@type":"Answer","text":"Easy 14-day returns with no hidden conditions. Email support@astaa.store and we will arrange it."}},
+      {"@type":"Question","name":"Can I track my order?","acceptedAnswer":{"@type":"Answer","text":"Yes — every order gets a confirmation email with a tracking number and live tracking link."}},
+      {"@type":"Question","name":"Are customs duties included?","acceptedAnswer":{"@type":"Answer","text":"International shipping and any duties are clearly shown at checkout before you pay — no surprises."}}
+    ]}
+  ]
+}
+</script>
 <style>
   :root{
     --ink:#12234a;
@@ -400,6 +435,53 @@
     border:1px solid rgba(191,224,255,.35);background:rgba(255,255,255,.12);
     backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
   #pdMain img{cursor:zoom-in}
+
+  /* ===== DEAL OF THE DAY + COUNTDOWN ===== */
+  .deal-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:34px;align-items:center;padding:38px;border-radius:var(--radius)}
+  @media(max-width:820px){.deal-grid{grid-template-columns:1fr;padding:26px}}
+  .deal-img{height:300px;border-radius:20px;overflow:hidden;border:1px solid var(--stroke);
+    background:rgba(255,255,255,.15);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+  .deal-img img{width:100%;height:100%;object-fit:cover;transform:scale(1.06);transition:transform .55s}
+  .deal-grid:hover .deal-img img{transform:scale(1.13)}
+  .deal-info h3{font-family:Georgia,serif;font-weight:400;font-size:1.5rem;line-height:1.35;margin:12px 0 8px;color:var(--ivory);text-shadow:0 3px 18px rgba(4,10,28,.55)}
+  .cd-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+  .cd-box{min-width:76px;padding:14px 10px;text-align:center;border-radius:18px}
+  .cd-num{font-family:Georgia,serif;font-size:1.7rem;font-weight:700;color:var(--ivory);text-shadow:0 2px 12px rgba(4,10,28,.5)}
+  .cd-lab{font-size:.6rem;letter-spacing:2.5px;color:rgba(238,244,255,.75);margin-top:4px}
+
+  /* ===== TESTIMONIALS ===== */
+  .t-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+  .t-card{padding:28px 24px;border-radius:var(--radius);display:flex;flex-direction:column}
+  .t-stars{color:var(--ice);letter-spacing:3px;font-size:.85rem;margin-bottom:12px;text-shadow:0 1px 8px rgba(4,10,28,.45)}
+  .t-text{color:rgba(238,244,255,.9);font-size:.88rem;line-height:1.7;flex:1;text-shadow:0 1px 8px rgba(4,10,28,.4)}
+  .t-name{display:flex;align-items:center;gap:12px;margin-top:18px}
+  .t-name b{display:block;font-size:.86rem;color:var(--ivory)}
+  .t-name small{color:rgba(238,244,255,.65);font-size:.72rem}
+  .t-ava{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-weight:700;color:#0e1830;background:linear-gradient(120deg,#eef6ff,#9cc4f5);
+    box-shadow:0 6px 18px rgba(4,10,28,.4)}
+
+  /* ===== FAQ ===== */
+  .faq-list{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+  .faq-item{border-radius:18px;overflow:hidden}
+  .faq-item summary{padding:18px 22px;cursor:pointer;font-weight:600;font-size:.92rem;color:var(--ivory);
+    list-style:none;display:flex;justify-content:space-between;align-items:center;gap:14px;
+    text-shadow:0 1px 8px rgba(4,10,28,.4)}
+  .faq-item summary::-webkit-details-marker{display:none}
+  .faq-item summary::after{content:"+";font-size:1.3rem;color:var(--ice);font-weight:400;flex-shrink:0}
+  .faq-item[open] summary::after{content:"–"}
+  .faq-item p{padding:0 22px 20px;color:rgba(238,244,255,.82);font-size:.88rem;line-height:1.7;text-shadow:0 1px 8px rgba(4,10,28,.35)}
+
+  /* ===== INSTAGRAM STRIP ===== */
+  .ig-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:760px){.ig-grid{grid-template-columns:repeat(2,1fr)}}
+  .ig-tile{position:relative;height:170px;border-radius:16px;overflow:hidden;border:1px solid var(--stroke);display:block}
+  .ig-tile img{width:100%;height:100%;object-fit:cover;transform:scale(1.05);transition:transform .45s}
+  .ig-tile:hover img{transform:scale(1.15)}
+  .ig-hov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:rgba(14,24,48,.5);backdrop-filter:blur(3px);opacity:0;transition:opacity .25s;
+    color:#fff;font-size:.74rem;letter-spacing:1.8px;font-weight:700}
+  .ig-tile:hover .ig-hov{opacity:1}
 </style>
 </head>
 <body>
@@ -423,6 +505,8 @@
         <li><a href="#categories">Categories</a></li>
         <li><a href="#products">Collection</a></li>
         <li><a href="#story">Our Story</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="#faq">FAQ</a></li>
         <li><a href="#subscribe">Newsletter</a></li>
       </ul>
       <div class="nav-search">
@@ -489,6 +573,81 @@
   </div>
 </section>
 
+<section id="deal" class="wrap">
+  <div class="sec-head">
+    <div class="eyebrow">Limited Time</div>
+    <h2>Deal of the Day</h2>
+    <div class="gold-line"></div>
+  </div>
+  <div class="deal-grid glass" id="dealBox">
+    <div class="loading"><span class="load-anim">✦</span>&nbsp; Loading today's deal…</div>
+  </div>
+</section>
+
+<section id="testimonials" class="wrap">
+  <div class="sec-head">
+    <div class="eyebrow">Loved Worldwide</div>
+    <h2>What Our Customers Say</h2>
+    <div class="gold-line"></div>
+  </div>
+  <div class="t-grid">
+    <div class="t-card glass">
+      <div class="t-stars">★★★★★</div>
+      <p class="t-text">“The humidifier arrived in 9 days, packed beautifully. Exactly like the photos — my whole desk looks premium now.”</p>
+      <div class="t-name"><span class="t-ava">A</span><div><b>Ayesha R.</b><small>Dhaka 🇧🇩</small></div></div>
+    </div>
+    <div class="t-card glass">
+      <div class="t-stars">★★★★★</div>
+      <p class="t-text">“Ordered two perfumes — the scent lasts all day. Checkout with mada took under a minute.”</p>
+      <div class="t-name"><span class="t-ava">O</span><div><b>Omar K.</b><small>Riyadh 🇸🇦</small></div></div>
+    </div>
+    <div class="t-card glass">
+      <div class="t-stars">★★★★☆</div>
+      <p class="t-text">“Support replied within hours when I asked about sizes. The cardigan fits perfectly.”</p>
+      <div class="t-name"><span class="t-ava">P</span><div><b>Priya S.</b><small>Kolkata 🇮🇳</small></div></div>
+    </div>
+    <div class="t-card glass">
+      <div class="t-stars">★★★★★</div>
+      <p class="t-text">“Tracking worked the whole way to Dubai. Will definitely order the fill light next.”</p>
+      <div class="t-name"><span class="t-ava">L</span><div><b>Lina M.</b><small>Dubai 🇦🇪</small></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="wrap">
+  <div class="sec-head">
+    <div class="eyebrow">Good to Know</div>
+    <h2>Frequently Asked Questions</h2>
+    <div class="gold-line"></div>
+  </div>
+  <div class="faq-list">
+    <details class="faq-item glass" open>
+      <summary>How long does shipping take?</summary>
+      <p>Standard international delivery usually takes 7–15 business days, tracked to your door. Shipping is free on orders over $33.</p>
+    </details>
+    <details class="faq-item glass">
+      <summary>Which payment methods do you accept?</summary>
+      <p>We accept PayPal, mada and all major credit/debit cards through the secure Shopify checkout.</p>
+    </details>
+    <details class="faq-item glass">
+      <summary>What is your return policy?</summary>
+      <p>Easy 14-day returns with no hidden conditions. Email <a href="mailto:support@astaa.store" style="color:var(--ice)">support@astaa.store</a> and we will arrange it.</p>
+    </details>
+    <details class="faq-item glass">
+      <summary>Can I track my order?</summary>
+      <p>Yes — every order gets a confirmation email with a tracking number and a live tracking link.</p>
+    </details>
+    <details class="faq-item glass">
+      <summary>Are customs duties included?</summary>
+      <p>International shipping and any duties are clearly shown at checkout before you pay — no surprises.</p>
+    </details>
+    <details class="faq-item glass">
+      <summary>How do I use my 20% discount?</summary>
+      <p>Sign up with your email, then use code <b style="color:var(--ice)">ASTAA20</b> at checkout for 20% off your first order.</p>
+    </details>
+  </div>
+</section>
+
 <section class="wrap">
   <div class="sec-head">
     <div class="eyebrow">Why ASTAA</div>
@@ -510,6 +669,17 @@
       <button class="btn btn-gold" type="submit">Subscribe</button>
     </form>
   </div>
+</section>
+
+<section id="instagram" class="wrap">
+  <div class="sec-head">
+    <div class="eyebrow">@astaa.store</div>
+    <h2>Follow the Edit</h2>
+    <p>Real products, real photos — tap any tile to shop it.</p>
+    <div class="gold-line"></div>
+  </div>
+  <div class="ig-grid" id="instaGrid"><div class="loading"><span class="load-anim">✦</span>&nbsp; Loading…</div></div>
+  <div style="text-align:center;margin-top:28px"><a class="btn btn-glass" href="https://astaa.store" target="_blank" rel="noopener">Follow @astaa.store ↗</a></div>
 </section>
 
 <footer>
@@ -664,7 +834,7 @@ async function loadProducts(){
     });
   }catch(e){ products = FALLBACK; }
   if(!products.length) products = FALLBACK;
-  renderCats(); renderFilters(); renderSubSections(); renderGrid();
+  renderCats(); renderFilters(); renderSubSections(); renderGrid(); renderDeal(); renderInsta();
 }
 
 function renderCats(){
@@ -726,6 +896,58 @@ function renderSubSections(){
       <div class="row-head"><h3><i>✦</i>${r.title}</h3><span class="rh-sub">${r.sub}</span></div>
       <div class="hscroll">${r.list.map(p=>cardHTML(p, r.tag)).join("")}</div>
     </div>`).join("");
+}
+
+function renderDeal(){
+  const deal = products.find(p=>p.compare_at_price && p.compare_at_price>p.price) || products[0];
+  if(!deal) return;
+  const i = products.indexOf(deal);
+  const onSale = deal.compare_at_price && deal.compare_at_price > deal.price;
+  document.getElementById("dealBox").innerHTML = `
+    <div class="deal-img">${deal.img?`<img src="${deal.img}" alt="${deal.title.replace(/"/g,"&quot;")}">`:`<div class="no-img">✦</div>`}</div>
+    <div class="deal-info">
+      <div class="eyebrow" style="color:var(--ice);font-size:.72rem;letter-spacing:3px;text-transform:uppercase">⚡ Flash Deal — Today Only</div>
+      <h3>${deal.title}</h3>
+      <div class="stars">★★★★★ <small>ASTAA pick</small></div>
+      <div class="price-row" style="margin:0 0 18px">
+        <span class="price">${money(deal.price)}</span>
+        ${onSale?`<span class="old">${money(deal.compare_at_price)}</span><span class="pd-tag-inline">SAVE ${money(deal.compare_at_price-deal.price)}</span>`:""}
+      </div>
+      <div class="cd-row">
+        <div class="cd-box glass"><div class="cd-num" id="cdH">00</div><div class="cd-lab">HRS</div></div>
+        <div class="cd-box glass"><div class="cd-num" id="cdM">00</div><div class="cd-lab">MIN</div></div>
+        <div class="cd-box glass"><div class="cd-num" id="cdS">00</div><div class="cd-lab">SEC</div></div>
+      </div>
+      <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap">
+        <button class="add-cart" style="width:auto;padding:14px 32px" onclick="addToCart(${i},1)">ADD TO CART</button>
+        <button class="btn btn-glass" style="padding:14px 28px" onclick="openPD(${i})">View Details</button>
+      </div>
+    </div>`;
+}
+
+function tickDeal(){
+  const now = new Date();
+  const end = new Date(now); end.setHours(23,59,59,999);
+  let s = Math.max(0, Math.floor((end-now)/1000));
+  const h = String(Math.floor(s/3600)).padStart(2,"0"); s%=3600;
+  const m = String(Math.floor(s/60)).padStart(2,"0");
+  const sec = String(s%60).padStart(2,"0");
+  const H=document.getElementById("cdH"), M=document.getElementById("cdM"), S=document.getElementById("cdS");
+  if(H) H.textContent=h; if(M) M.textContent=m; if(S) S.textContent=sec;
+}
+setInterval(tickDeal,1000); tickDeal();
+
+function renderInsta(){
+  const imgs = [];
+  products.forEach(p=>{ if(p.img && !imgs.includes(p.img)) imgs.push(p.img); });
+  const picks = imgs.slice(0,8);
+  const el = document.getElementById("instaGrid");
+  if(!picks.length){ el.innerHTML = `<div class="loading">Loading…</div>`; return; }
+  el.innerHTML = picks.map(s=>`
+    <a class="ig-tile" href="https://astaa.store/collections/all" target="_blank" rel="noopener">
+      <img src="${s}" alt="ASTAA product" loading="lazy">
+      <span class="ig-hov">❤ SHOP THIS</span>
+    </a>`).join("");
 }
 
 let pdQty = 1, pdIndex = 0, pdSel = null, pdImgIdx = 0;
