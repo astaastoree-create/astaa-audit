@@ -159,8 +159,8 @@
     transition:transform .28s, box-shadow .28s, background .28s;position:relative}
   .card:hover{transform:translateY(-7px);background:rgba(255,255,255,.24);box-shadow:0 34px 80px rgba(4,10,28,.5)}
   .thumb{height:246px;overflow:hidden;position:relative;border-bottom:1px solid var(--stroke);background:rgba(255,255,255,.15)}
-  .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .55s}
-  .card:hover .thumb img{transform:scale(1.07)}
+  .thumb img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);transform-origin:center 30%;transition:transform .55s}
+  .card:hover .thumb img{transform:scale(1.16)}
   .tag{position:absolute;top:14px;left:14px;z-index:2;font-size:.66rem;letter-spacing:2px;font-weight:700;
     padding:5px 14px;border-radius:999px;color:#12234a;
     background:rgba(238,246,255,.88);border:1px solid rgba(255,255,255,.8);backdrop-filter:blur(12px)}
@@ -296,6 +296,30 @@
   .load-anim{display:inline-block;animation:pulse 1.4s infinite}
   @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
   @media(max-width:560px){.hero{padding:80px 0 30px}.thumb{height:210px}.pd-info{padding:26px 22px}}
+
+  /* ===== SUB-SECTION ROWS (New Arrivals / Best Sellers / On Sale) ===== */
+  .row-wrap{margin-bottom:56px}
+  .row-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px;gap:12px}
+  .row-head h3{font-family:Georgia,serif;font-weight:400;font-size:1.4rem;color:var(--ivory);text-shadow:0 3px 18px rgba(4,10,28,.55)}
+  .row-head h3 i{font-style:normal;color:var(--ice);margin-right:8px}
+  .rh-sub{font-size:.78rem;color:rgba(238,244,255,.75);letter-spacing:.6px;text-shadow:0 1px 8px rgba(4,10,28,.4);white-space:nowrap}
+  .hscroll{display:flex;gap:18px;overflow-x:auto;padding:4px 2px 16px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .hscroll .card{min-width:262px;max-width:262px;scroll-snap-align:start}
+  .hscroll::-webkit-scrollbar{height:6px}
+  .hscroll::-webkit-scrollbar-track{background:rgba(255,255,255,.08);border-radius:3px}
+  .hscroll::-webkit-scrollbar-thumb{background:rgba(156,196,245,.5);border-radius:3px}
+
+  /* ===== RELATED PRODUCTS (inside product details) ===== */
+  .related{margin-top:24px;border-top:1px dashed rgba(44,98,201,.3);padding-top:18px}
+  .related h4{font-family:Georgia,serif;font-weight:400;font-size:1.05rem;color:var(--ink);margin-bottom:12px;letter-spacing:.4px}
+  .rel-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .rel-row::-webkit-scrollbar{height:5px}
+  .rel-row::-webkit-scrollbar-thumb{background:rgba(44,98,201,.35);border-radius:3px}
+  .rel-card{min-width:128px;max-width:128px;cursor:pointer;border-radius:14px;border:1px solid rgba(44,98,201,.25);background:rgba(255,255,255,.55);padding:9px;scroll-snap-align:start;transition:transform .2s, box-shadow .2s}
+  .rel-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(4,10,28,.18)}
+  .rel-card img{width:100%;height:92px;object-fit:cover;border-radius:10px;background:#fff;border:1px solid rgba(255,255,255,.6)}
+  .rel-card .rt{font-size:.68rem;line-height:1.35;margin:7px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+  .rel-card .rp{font-weight:700;color:var(--ice-deep);font-size:.8rem}
 </style>
 </head>
 <body>
@@ -359,6 +383,7 @@
     <p>Live prices from our store — tap any piece to see full details through the ice glass.</p>
     <div class="gold-line"></div>
   </div>
+  <div id="subRows"></div>
   <div class="filters" id="filters"></div>
   <div class="grid" id="grid"><div class="loading"><span class="load-anim">✦</span>&nbsp; Loading collection from the store…</div></div>
 
@@ -514,7 +539,7 @@ async function loadProducts(){
     })).filter(p => p.img);
   }catch(e){ products = FALLBACK; }
   if(!products.length) products = FALLBACK;
-  renderCats(); renderFilters(); renderGrid();
+  renderCats(); renderFilters(); renderSubSections(); renderGrid();
 }
 
 function renderCats(){
@@ -530,26 +555,46 @@ function renderFilters(){
 }
 function setCat(k){ activeCat = k; renderFilters(); renderGrid(); }
 
+function cardHTML(p, tag){
+  const i = products.indexOf(p);
+  const onSale = p.compare_at_price && p.compare_at_price > p.price;
+  return `
+  <div class="card glass" onclick="openPD(${i})">
+    <div class="thumb">${tag||""}<img src="${p.img}" alt="${p.title.replace(/"/g,"&quot;")}" loading="lazy"></div>
+    <div class="card-body">
+      <h3>${p.title}</h3>
+      <div class="stars">★★★★★ <small>ASTAA pick</small></div>
+      <div class="price-row">
+        <span class="price">${money(p.price)}</span>
+        ${onSale?`<span class="old">${money(p.compare_at_price)}</span>`:""}
+      </div>
+      <button class="add-cart" onclick="event.stopPropagation();addToCart(${i},1)">ADD TO CART</button>
+    </div>
+  </div>`;
+}
+
 function renderGrid(){
   const list = products.filter(p => activeCat==="all" || catOf(p.type)===activeCat);
   document.getElementById("grid").innerHTML = list.map((p,i) => {
     const onSale = p.compare_at_price && p.compare_at_price > p.price;
-    const tags = onSale ? `<span class="tag">SALE · ${Math.round((1-p.price/p.compare_at_price)*100)}% OFF</span>`
+    const tag = onSale ? `<span class="tag">SALE · ${Math.round((1-p.price/p.compare_at_price)*100)}% OFF</span>`
       : (i < 2 ? `<span class="tag">NEW</span>` : "");
-    return `
-    <div class="card glass" onclick="openPD(${products.indexOf(p)})">
-      <div class="thumb">${tags}<img src="${p.img}" alt="${p.title.replace(/"/g,"&quot;")}" loading="lazy"></div>
-      <div class="card-body">
-        <h3>${p.title}</h3>
-        <div class="stars">★★★★★ <small>ASTAA pick</small></div>
-        <div class="price-row">
-          <span class="price">${money(p.price)}</span>
-          ${onSale?`<span class="old">${money(p.compare_at_price)}</span>`:""}
-        </div>
-        <button class="add-cart" onclick="event.stopPropagation();addToCart(${products.indexOf(p)},1)">ADD TO CART</button>
-      </div>
-    </div>`;
+    return cardHTML(p, tag);
   }).join("") || `<div class="loading">No pieces in this category yet — try another.</div>`;
+}
+
+function renderSubSections(){
+  const bestKeys = ["jellyfish","perfume","niacinamide","sunscreen","fill light","face cream"];
+  const rows = [
+    {title:"New Arrivals", sub:"Fresh drops — just landed in the store", list:products.slice(0,8), tag:"<span class='tag'>NEW</span>"},
+    {title:"Best Sellers", sub:"The pieces our customers love most", list:products.filter(p=>bestKeys.some(k=>p.title.toLowerCase().includes(k))).slice(0,8), tag:"<span class='tag'>BEST SELLER</span>"},
+    {title:"On Sale Now", sub:"Limited-time prices — while stock lasts", list:products.filter(p=>p.compare_at_price && p.compare_at_price>p.price).slice(0,8), tag:""}
+  ];
+  document.getElementById("subRows").innerHTML = rows.filter(r=>r.list.length).map(r => `
+    <div class="row-wrap">
+      <div class="row-head"><h3><i>✦</i>${r.title}</h3><span class="rh-sub">${r.sub}</span></div>
+      <div class="hscroll">${r.list.map(p=>cardHTML(p, r.tag)).join("")}</div>
+    </div>`).join("");
 }
 
 let pdQty = 1, pdIndex = 0;
@@ -577,11 +622,24 @@ function openPD(i){
       </div>
       <button class="add-cart" onclick="addToCart(pdIndex,pdQty);closeAll()">ADD TO CART</button>
     </div>
+    ${relatedHTML(i)}
     <div class="pd-sub">🔒 Secure checkout on astaa.store — PayPal, mada &amp; major cards. You will confirm quantity and address in the final step.</div>`;
   document.getElementById("pdModal").classList.add("open");
   document.getElementById("overlay").classList.add("show");
 }
 function pdChange(d){ pdQty = Math.max(1, pdQty + d); document.getElementById("pdQty").textContent = pdQty; }
+
+function relatedHTML(i){
+  const p = products[i];
+  const rel = products.filter((x,xi)=>xi!==i && catOf(x.type)===catOf(p.type)).slice(0,6);
+  if(!rel.length) return "";
+  return `<div class="related"><h4>You may also like ✦</h4><div class="rel-row">${rel.map(r=>`
+    <div class="rel-card" onclick="event.stopPropagation();openPD(${products.indexOf(r)})">
+      <img src="${r.img}" alt="" loading="lazy">
+      <div class="rt">${r.title}</div>
+      <div class="rp">${money(r.price)}</div>
+    </div>`).join("")}</div></div>`;
+}
 
 function addToCart(i,q){
   const p = products[i];
