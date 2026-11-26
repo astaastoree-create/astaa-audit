@@ -482,6 +482,8 @@
     background:rgba(14,24,48,.5);backdrop-filter:blur(3px);opacity:0;transition:opacity .25s;
     color:#fff;font-size:.74rem;letter-spacing:1.8px;font-weight:700}
   .ig-tile:hover .ig-hov{opacity:1}
+  #pdMain img{cursor:zoom-in}
+  .thumb img{cursor:zoom-in}
 </style>
 </head>
 <body>
@@ -820,20 +822,35 @@ async function loadProducts(){
       const options = (p.options||[]).filter(o=>o.values && o.values.length>1)
         .map(o=>({name:o.name, values:o.values}));
       const v0 = variants.find(v=>v.available) || variants[0] || {};
+      const pv0 = (p.variants && p.variants[0]) || {};
       return {
         id:p.id, title:p.title, handle:p.handle,
-        price:parseFloat(p.variants[0].price),
-        compare_at_price:p.variants[0].compare_at_price?parseFloat(p.variants[0].compare_at_price):null,
+        price:parseFloat(pv0.price||0),
+        compare_at_price:pv0.compare_at_price?parseFloat(pv0.compare_at_price):null,
         type:p.product_type||"Home & Living",
-        img:(p.images[0]||{}).src||(v0.img||""),
+        img:((p.images&&p.images[0])||{}).src||(v0.img||""),
         vid:v0.id,
-        available:p.variants[0].available,
+        available:!!pv0.available,
         desc:cleanDesc(p.body_html),
         variants, images, options
       };
     });
-  }catch(e){ products = FALLBACK; }
-  if(!products.length) products = FALLBACK;
+  }catch(e){
+    products = FALLBACK.map(f => ({
+      ...f,
+      variants:[{id:f.vid, vtitle:"Default Title", opts:[], price:f.price, compare:f.compare_at_price, available:true, img:f.img}],
+      images:[f.img].filter(Boolean),
+      options:[]
+    }));
+  }
+  if(!products.length){
+    products = FALLBACK.map(f => ({
+      ...f,
+      variants:[{id:f.vid, vtitle:"Default Title", opts:[], price:f.price, compare:f.compare_at_price, available:true, img:f.img}],
+      images:[f.img].filter(Boolean),
+      options:[]
+    }));
+  }
   renderCats(); renderFilters(); renderSubSections(); renderGrid(); renderDeal(); renderInsta();
 }
 
@@ -855,7 +872,7 @@ function cardHTML(p, tag){
   const onSale = p.compare_at_price && p.compare_at_price > p.price;
   return `
   <div class="card glass" onclick="openPD(${i})">
-    <div class="thumb">${tag||""}${p.img?`<img src="${p.img}" alt="${p.title.replace(/"/g,"&quot;")}" loading="lazy">`:`<div class="no-img">✦</div>`}</div>
+    <div class="thumb">${tag||""}${p.img?`<img src="${p.img}" alt="${p.title.replace(/"/g,"&quot;")}" loading="lazy" onclick="event.stopPropagation();openLightboxAt(${i},0)">`:`<div class="no-img">✦</div>`}</div>
     <div class="card-body">
       <h3>${p.title}</h3>
       <div class="stars">★★★★★ <small>ASTAA pick</small></div>
@@ -1036,7 +1053,7 @@ function openPD(i){
   pdIndex = i; pdQty = 1; pdImgIdx = 0;
   const p = products[i];
   const imgs = pdImages(p);
-  const firstAvail = (p.variants||[]).find(v=>v.available) || p.variants[0] || null;
+  const firstAvail = (p.variants||[]).find(v=>v.available) || (p.variants||[])[0] || null;
   pdSel = { opts:(p.options||[]).map(()=>null), var:firstAvail };
   if(firstAvail && firstAvail.img){
     const vi = imgs.indexOf(firstAvail.img); if(vi>-1) pdImgIdx = vi;
@@ -1165,8 +1182,10 @@ function goCheckout(){
 }
 
 let lbImgs = [], lbIdx = 0;
+const bigImg = s => (s && s.includes("cdn.shopify") && !s.includes("width=")) ? s + "&width=1400" : s;
+function openLightboxAt(pi, ii){ pdIndex = pi; pdImgIdx = ii; openLightbox(ii); }
 function openLightbox(i){
-  lbImgs = pdImages(products[pdIndex]);
+  lbImgs = pdImages(products[pdIndex]).map(bigImg);
   if(!lbImgs.length) return;
   lbIdx = Math.max(0, Math.min(i, lbImgs.length-1));
   renderLightbox();
