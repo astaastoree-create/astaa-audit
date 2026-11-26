@@ -318,8 +318,54 @@
   .rel-card{min-width:128px;max-width:128px;cursor:pointer;border-radius:14px;border:1px solid rgba(44,98,201,.25);background:rgba(255,255,255,.55);padding:9px;scroll-snap-align:start;transition:transform .2s, box-shadow .2s}
   .rel-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(4,10,28,.18)}
   .rel-card img{width:100%;height:92px;object-fit:cover;border-radius:10px;background:#fff;border:1px solid rgba(255,255,255,.6)}
+  .rel-card .no-img{height:92px;border-radius:10px;border:1px solid rgba(255,255,255,.6);font-size:1.3rem;color:var(--ice-deep)}
   .rel-card .rt{font-size:.68rem;line-height:1.35;margin:7px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
   .rel-card .rp{font-weight:700;color:var(--ice-deep);font-size:.8rem}
+
+  /* ===== ANNOUNCEMENT BAR / NAV SEARCH ===== */
+  .announce{width:100%;text-align:center;padding:9px 16px;font-size:.76rem;letter-spacing:1.1px;
+    color:var(--ivory);background:rgba(10,18,38,.5);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border-bottom:1px solid rgba(191,224,255,.22);text-shadow:0 1px 8px rgba(4,10,28,.5);position:relative;z-index:40}
+  .announce b{color:var(--ice)}
+  .nav-search{flex:1;max-width:280px;display:flex;align-items:center;gap:8px;border:1px solid var(--stroke);
+    border-radius:999px;padding:8px 16px;background:rgba(255,255,255,.14);
+    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+  .nav-search span{color:rgba(238,244,255,.8);font-size:.95rem}
+  .nav-search input{flex:1;min-width:0;border:none;background:none;outline:none;color:var(--ivory);font-size:.85rem}
+  .nav-search input::placeholder{color:rgba(238,244,255,.6)}
+  @media(max-width:900px){.nav-search{display:none}}
+
+  /* ===== NO-IMAGE PLACEHOLDER ===== */
+  .no-img{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+    font-size:2.4rem;color:rgba(238,246,255,.9);text-shadow:0 6px 20px rgba(4,10,28,.45);
+    background:linear-gradient(140deg,rgba(255,255,255,.22),rgba(191,224,255,.1) 55%,rgba(44,98,201,.22))}
+
+  /* ===== MULTI-IMAGE GALLERY THUMBS ===== */
+  .pd-thumbs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .pd-thumbs .th{width:62px;height:62px;border-radius:12px;overflow:hidden;cursor:pointer;padding:0;
+    border:2px solid rgba(255,255,255,.55);background:rgba(255,255,255,.4);transition:border-color .2s, transform .2s}
+  .pd-thumbs .th img{width:100%;height:100%;object-fit:cover}
+  .pd-thumbs .th.active{border-color:var(--ice-deep);transform:scale(1.07)}
+
+  /* ===== VARIANT OPTION CHIPS ===== */
+  .pd-opt{margin-bottom:12px}
+  .pd-opt .opt-name{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+  .opt-vals{display:flex;gap:8px;flex-wrap:wrap}
+  .opt-val{padding:8px 16px;border-radius:999px;border:1px solid rgba(44,98,201,.4);cursor:pointer;
+    font-size:.8rem;background:rgba(255,255,255,.7);color:var(--ink);transition:all .2s}
+  .opt-val:hover{background:rgba(255,255,255,.95)}
+  .opt-val.active{background:linear-gradient(120deg,#eef6ff,#9cc4f5);border-color:transparent;font-weight:700;color:#0e1830}
+  .opt-val.muted{opacity:.4;text-decoration:line-through}
+  .pd-stock{font-size:.8rem;font-weight:600;margin-bottom:14px}
+  .pd-stock.in{color:#2e7d5b}
+  .pd-stock.out{color:#c0392b}
+
+  /* ===== FOOTER MAIL PILL ===== */
+  .mail-pill{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:9px 18px;border-radius:999px;
+    border:1px solid var(--stroke);background:rgba(255,255,255,.12);color:var(--ivory);text-decoration:none;
+    font-size:.84rem;letter-spacing:.4px;transition:background .2s}
+  .mail-pill:hover{background:rgba(255,255,255,.24);color:#fff}
+  @media(max-width:560px){.pd-main img{max-height:250px}.pd-thumbs .th{width:52px;height:52px}}
 </style>
 </head>
 <body>
@@ -333,6 +379,8 @@
   <div class="prism"></div>
 </div>
 
+<div class="announce">✦ Free delivery on orders <b>$33+</b> &nbsp;·&nbsp; Sign up &amp; get <b>20% off</b> — code <b>ASTAA20</b> &nbsp;·&nbsp; International shipping &amp; duties shown at checkout</div>
+
 <nav>
   <div class="wrap">
     <div class="nav-inner glass">
@@ -343,6 +391,10 @@
         <li><a href="#story">Our Story</a></li>
         <li><a href="#subscribe">Newsletter</a></li>
       </ul>
+      <div class="nav-search">
+        <span>⌕</span>
+        <input type="text" placeholder="Search products…" oninput="onSearch(this.value)">
+      </div>
       <div class="nav-right">
         <button class="cart-btn" onclick="openCart()">Cart <span id="cartCount">0</span></button>
         <button class="menu-btn" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
@@ -432,30 +484,47 @@
       <div class="foot-brand">
         <div class="logo">ASTA<em>A</em></div>
         <p>Fashion, beauty, wellness gadgets and everyday essentials — chosen for warmth and real-life use.</p>
+        <a class="mail-pill" href="mailto:support@astaa.store">✉ support@astaa.store</a>
+      </div>
+      <div>
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="#products" onclick="setCat('fashion')">Fashion</a></li>
+          <li><a href="#products" onclick="setCat('beauty')">Beauty &amp; Care</a></li>
+          <li><a href="#products" onclick="setCat('electronics')">Electronics</a></li>
+          <li><a href="#products" onclick="setCat('home')">Home &amp; Living</a></li>
+          <li><a href="#products" onclick="setCat('home')">Kitchen &amp; Dining</a></li>
+          <li><a href="#products" onclick="setCat('home')">Car &amp; Automotive</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Customer Care</h4>
+        <ul>
+          <li><a href="https://astaa.store/policies/shipping-policy" target="_blank">Shipping</a></li>
+          <li><a href="https://astaa.store/policies/refund-policy" target="_blank">Returns</a></li>
+          <li><a href="https://astaa.store" target="_blank">FAQ</a></li>
+          <li><a href="mailto:support@astaa.store">Contact</a></li>
+          <li><a href="https://astaa.store/policies/privacy-policy" target="_blank">Privacy</a></li>
+        </ul>
       </div>
       <div>
         <h4>Shop</h4>
         <ul>
           <li><a href="https://astaa.store/collections/all" target="_blank">All Products</a></li>
-          <li><a href="https://astaa.store/collections/electronics" target="_blank">Electronics</a></li>
-          <li><a href="https://astaa.store/collections/gadgets" target="_blank">Gadgets</a></li>
-          <li><a href="https://astaa.store/collections/top-sellers" target="_blank">Top Sellers</a></li>
+          <li><a href="#subRows" onclick="setCat('all')">New Arrivals</a></li>
+          <li><a href="#subRows" onclick="setCat('all')">Trending Now</a></li>
+          <li><a href="#subRows" onclick="setCat('all')">Best Sellers</a></li>
+          <li><a href="#products" onclick="setCat('all')">Featured Items</a></li>
         </ul>
       </div>
       <div>
-        <h4>Help</h4>
+        <h4>Legal &amp; Policies</h4>
         <ul>
-          <li><a href="https://astaa.store/policies/shipping-policy" target="_blank">Shipping Policy</a></li>
-          <li><a href="https://astaa.store/policies/refund-policy" target="_blank">Returns &amp; Refunds</a></li>
           <li><a href="https://astaa.store/policies/privacy-policy" target="_blank">Privacy Policy</a></li>
-          <li><a href="https://astaa.store/policies/contact-information" target="_blank">Contact Us</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Checkout</h4>
-        <ul>
-          <li><a href="https://astaa.store/cart" target="_blank">View Cart</a></li>
-          <li><a href="https://astaa.store" target="_blank">Official Store ↗</a></li>
+          <li><a href="https://astaa.store/policies/refund-policy" target="_blank">Refund Policy</a></li>
+          <li><a href="https://astaa.store/policies/shipping-policy" target="_blank">Shipping Policy</a></li>
+          <li><a href="https://astaa.store/policies/contact-information" target="_blank">Contact Information</a></li>
+          <li><a href="https://astaa.store/policies/terms-of-service" target="_blank">Terms of Service</a></li>
         </ul>
       </div>
     </div>
@@ -477,7 +546,7 @@
       <button class="btn btn-outline" style="padding:10px 18px" onclick="applyPromo()">Apply</button>
     </div>
     <div class="sum-row"><span>Subtotal</span><span id="sumSubtotal">$0.00</span></div>
-    <div class="sum-row"><span>Shipping</span><span class="free" id="sumShipping">Free over $51</span></div>
+    <div class="sum-row"><span>Shipping</span><span class="free" id="sumShipping">Free over $33</span></div>
     <div class="sum-row total"><span>Total</span><span id="sumTotal">$0.00</span></div>
     <button class="btn btn-gold" id="checkoutBtn" onclick="goCheckout()">Proceed to Secure Checkout</button>
     <div class="shopify-note">🔒 Continues on astaa.store — PayPal, mada &amp; cards accepted</div>
@@ -496,7 +565,7 @@
 
 <script>
 const STORE = "https://astaa.store";
-const FREE_SHIP = 51;
+const FREE_SHIP = 33;
 const CATS = [
   {key:"fashion",  name:"Fashion",       ico:"👗", types:["Fashion","Dress","Skirt","Coat","Jacket","Cardigan","Sweater","Sandals","Shoes","Boots","Swimwear","Top","Pants","Blouse","Shirt","Maxi Dress","Dresses","Windbreaker"]},
   {key:"beauty",   name:"Beauty & Care", ico:"✨", types:["Beauty & Care","Face Mask","Skin Care","Cosmetics","Perfume","Makeup","Hair Care","Nail Care","Sunscreen","Cream","Foundation","Concealer","Serum","Tattoo"]},
@@ -508,7 +577,7 @@ const CATS = [
 const catOf = t => (CATS.find(c => c.types.some(x => (t||"").toLowerCase().includes(x.toLowerCase()))) || {key:"home"}).key;
 const money = n => "$" + Number(n).toFixed(2);
 
-let products = [], activeCat = "all", cart = [], promo = null;
+let products = [], activeCat = "all", cart = [], promo = null, searchQ = "";
 
 const FALLBACK = [
   {id:0,title:"Half Face Mask Masquerade",price:12.20,compare_at_price:null,handle:"half-face-mask-masquerade",type:"Face Mask",img:"https://cdn.shopify.com/s/files/1/0997/6850/0530/files/fed70cdc-6c09-43e6-9ecd-673960cb1d49.jpg?v=1795554141",vid:68769340621106,desc:"Elegant half-face masquerade mask in felt cloth with ribbon and iron chain."},
@@ -526,17 +595,31 @@ async function loadProducts(){
   try{
     const r = await fetch(STORE + "/products.json?limit=40");
     const data = await r.json();
-    products = data.products.map(p => ({
-      id:p.id, title:p.title, handle:p.handle,
-      price:parseFloat(p.variants[0].price),
-      compare_at_price:p.variants[0].compare_at_price?parseFloat(p.variants[0].compare_at_price):null,
-      type:p.product_type||"Home & Living",
-      img:(p.images[0]||p.variants[0].featured_image||{}).src||"",
-      vid:p.variants[0].id,
-      available:p.variants[0].available,
-      desc:cleanDesc(p.body_html),
-      specs:{"Type":p.product_type||"—","Vendor":"ASTAA","Availability":p.variants[0].available?"In stock":"Sold out","SKU":p.variants[0].sku||"—"}
-    })).filter(p => p.img);
+    products = data.products.map(p => {
+      const variants = (p.variants||[]).map(v => ({
+        id:v.id, vtitle:v.title,
+        opts:[v.option1, v.option2, v.option3].filter(Boolean),
+        price:parseFloat(v.price),
+        compare:v.compare_at_price?parseFloat(v.compare_at_price):null,
+        available:!!v.available,
+        img:(v.featured_image||{}).src||null
+      }));
+      const images = (p.images||[]).map(im=>im.src);
+      const options = (p.options||[]).filter(o=>o.values && o.values.length>1)
+        .map(o=>({name:o.name, values:o.values}));
+      const v0 = variants.find(v=>v.available) || variants[0] || {};
+      return {
+        id:p.id, title:p.title, handle:p.handle,
+        price:parseFloat(p.variants[0].price),
+        compare_at_price:p.variants[0].compare_at_price?parseFloat(p.variants[0].compare_at_price):null,
+        type:p.product_type||"Home & Living",
+        img:(p.images[0]||{}).src||(v0.img||""),
+        vid:v0.id,
+        available:p.variants[0].available,
+        desc:cleanDesc(p.body_html),
+        variants, images, options
+      };
+    });
   }catch(e){ products = FALLBACK; }
   if(!products.length) products = FALLBACK;
   renderCats(); renderFilters(); renderSubSections(); renderGrid();
@@ -560,7 +643,7 @@ function cardHTML(p, tag){
   const onSale = p.compare_at_price && p.compare_at_price > p.price;
   return `
   <div class="card glass" onclick="openPD(${i})">
-    <div class="thumb">${tag||""}<img src="${p.img}" alt="${p.title.replace(/"/g,"&quot;")}" loading="lazy"></div>
+    <div class="thumb">${tag||""}${p.img?`<img src="${p.img}" alt="${p.title.replace(/"/g,"&quot;")}" loading="lazy">`:`<div class="no-img">✦</div>`}</div>
     <div class="card-body">
       <h3>${p.title}</h3>
       <div class="stars">★★★★★ <small>ASTAA pick</small></div>
@@ -573,14 +656,20 @@ function cardHTML(p, tag){
   </div>`;
 }
 
+function onSearch(v){ searchQ = (v||"").toLowerCase().trim(); renderGrid(); }
+function visibleList(){
+  return products.filter(p =>
+    (activeCat==="all" || catOf(p.type)===activeCat) &&
+    (!searchQ || (p.title+" "+p.type).toLowerCase().includes(searchQ)));
+}
 function renderGrid(){
-  const list = products.filter(p => activeCat==="all" || catOf(p.type)===activeCat);
+  const list = visibleList();
   document.getElementById("grid").innerHTML = list.map((p,i) => {
     const onSale = p.compare_at_price && p.compare_at_price > p.price;
     const tag = onSale ? `<span class="tag">SALE · ${Math.round((1-p.price/p.compare_at_price)*100)}% OFF</span>`
       : (i < 2 ? `<span class="tag">NEW</span>` : "");
     return cardHTML(p, tag);
-  }).join("") || `<div class="loading">No pieces in this category yet — try another.</div>`;
+  }).join("") || `<div class="loading">No pieces match — try another category or search word.</div>`;
 }
 
 function renderSubSections(){
@@ -597,22 +686,110 @@ function renderSubSections(){
     </div>`).join("");
 }
 
-let pdQty = 1, pdIndex = 0;
+let pdQty = 1, pdIndex = 0, pdSel = null, pdImgIdx = 0;
+
+function pdImages(p){
+  const set = [];
+  (p.images||[]).forEach(s=>{ if(s && !set.includes(s)) set.push(s); });
+  (p.variants||[]).forEach(v=>{ if(v.img && !set.includes(v.img)) set.push(v.img); });
+  if(!set.length && p.img) set.push(p.img);
+  return set;
+}
+
+function matchVariant(p, sel){
+  const s = sel.filter(x=>x!==null);
+  if(!s.length) return null;
+  return (p.variants||[]).find(v => sel.every((val,i)=> val===null || v.opts[i]===val))
+      || (p.variants||[]).find(v => s.every(val => v.opts.includes(val))) || null;
+}
+
+function pickOpt(oi, val){
+  const p = products[pdIndex];
+  pdSel.opts[oi] = val;
+  const v = matchVariant(p, pdSel.opts);
+  if(v) pdSel.var = v;
+  if(v && v.img){
+    const imgs = pdImages(p);
+    const vi = imgs.indexOf(v.img);
+    if(vi>-1) selThumb(vi);
+  }
+  renderPDSelects(p);
+}
+
+function selThumb(i){
+  pdImgIdx = i;
+  const p = products[pdIndex];
+  const imgs = pdImages(p);
+  document.getElementById("pdMain").innerHTML = imgs[i]
+    ? `<img src="${imgs[i]}" alt="${p.title.replace(/"/g,"&quot;")}">`
+    : `<div class="no-img" style="height:320px;border-radius:18px">✦</div>`;
+  document.querySelectorAll("#pdThumbs .th").forEach((b,bi)=>b.classList.toggle("active", bi===i));
+}
+
+function renderPDSelects(p){
+  const v = pdSel.var;
+  const optBox = document.getElementById("pdOptions");
+  if(optBox){
+    optBox.innerHTML = p.options.map((o,oi)=>`
+      <div class="pd-opt">
+        <div class="opt-name">${o.name}</div>
+        <div class="opt-vals">${o.values.map(val=>{
+          const has = (p.variants||[]).some(x=>x.opts[oi]===val && x.available);
+          const act = pdSel.opts[oi]===val;
+          return `<button class="opt-val ${act?"active":""} ${has?"":"muted"}" onclick="pickOpt(${oi},'${String(val).replace(/'/g,"\\'")}')">${val}</button>`;
+        }).join("")}</div>
+      </div>`).join("");
+  }
+  const priceBox = document.getElementById("pdPriceBox");
+  if(priceBox){
+    const onSale = v && v.compare && v.compare > v.price;
+    priceBox.innerHTML = v ? `
+      <span class="price">${money(v.price)}</span>
+      ${onSale?`<span class="old" style="color:var(--muted);text-decoration:line-through">${money(v.compare)}</span><span class="pd-tag-inline">SAVE ${money(v.compare-v.price)}</span>`:""}` : "";
+  }
+  const stock = document.getElementById("pdStock");
+  if(stock){
+    if(v && !v.available){ stock.className="pd-stock out"; stock.textContent="Currently sold out — pick another option"; }
+    else { stock.className="pd-stock in"; stock.textContent="✓ In stock — ships from astaa.store"; }
+  }
+  const addBtn = document.getElementById("pdAddBtn");
+  if(addBtn){
+    const out = v ? !v.available : true;
+    addBtn.disabled = out;
+    addBtn.textContent = out ? "SOLD OUT" : "ADD TO CART";
+  }
+}
+
+function addPDToCart(){
+  const p = products[pdIndex];
+  const v = pdSel.var || (p.variants||[])[0];
+  if(!v || !v.available){ showToastMsg("Pick another option — this one is sold out"); return; }
+  addToCartRaw({vid:v.id, title:p.title, vtitle:(v.vtitle && v.vtitle!=="Default Title")?v.vtitle:"", price:v.price, img:v.img || p.img}, pdQty);
+  closeAll();
+}
+
 function openPD(i){
-  pdIndex = i; pdQty = 1;
+  pdIndex = i; pdQty = 1; pdImgIdx = 0;
   const p = products[i];
-  document.getElementById("pdGallery").innerHTML = `<img src="${p.img}" alt="${p.title.replace(/"/g,"&quot;")}">`;
+  const imgs = pdImages(p);
+  const firstAvail = (p.variants||[]).find(v=>v.available) || p.variants[0] || null;
+  pdSel = { opts:(p.options||[]).map(()=>null), var:firstAvail };
+  if(firstAvail && firstAvail.img){
+    const vi = imgs.indexOf(firstAvail.img); if(vi>-1) pdImgIdx = vi;
+  }
+  document.getElementById("pdGallery").innerHTML = `
+    <div class="pd-main" id="pdMain">${imgs[pdImgIdx]?`<img src="${imgs[pdImgIdx]}" alt="${p.title.replace(/"/g,"&quot;")}">`:`<div class="no-img" style="height:320px;border-radius:18px">✦</div>`}</div>
+    ${imgs.length>1?`<div class="pd-thumbs" id="pdThumbs">${imgs.map((s,si)=>`<button class="th ${si===pdImgIdx?"active":""}" onclick="selThumb(${si})"><img src="${s}" alt="" loading="lazy"></button>`).join("")}</div>`:""}`;
   document.getElementById("pdInfo").innerHTML = `
     <div class="eyebrow">${(CATS.find(c=>c.key===catOf(p.type))||{}).name||"ASTAA"}</div>
     <h2>${p.title}</h2>
     <div class="stars">★★★★★ <small>Loved by ASTAA customers</small></div>
-    <div class="pd-price">
-      <span class="price">${money(p.price)}</span>
-      ${p.compare_at_price>p.price?`<span class="old" style="color:var(--muted);text-decoration:line-through">${money(p.compare_at_price)}</span><span class="pd-tag-inline">SAVE ${money(p.compare_at_price-p.price)}</span>`:""}
-    </div>
+    <div class="pd-price" id="pdPriceBox"></div>
     <div class="pd-desc">${p.desc}</div>
+    <div class="pd-options" id="pdOptions"></div>
+    <div class="pd-stock in" id="pdStock"></div>
     <div class="pd-spec">
-      ${Object.entries(p.specs||{"Type":p.type,"Vendor":"ASTAA","Availability":p.available===false?"Sold out":"In stock"}).map(([k,v])=>`<div class="spec-row"><span>${k}</span><span>${v}</span></div>`).join("")}
+      <div class="spec-row"><span>Type</span><span>${p.type}</span></div>
       <div class="spec-row"><span>Shipping</span><span>Shown at checkout · Free over $${FREE_SHIP}</span></div>
       <div class="spec-row"><span>Returns</span><span>14-day easy returns</span></div>
     </div>
@@ -620,10 +797,11 @@ function openPD(i){
       <div class="pd-qty">
         <button onclick="pdChange(-1)">−</button><span id="pdQty">${pdQty}</span><button onclick="pdChange(1)">+</button>
       </div>
-      <button class="add-cart" onclick="addToCart(pdIndex,pdQty);closeAll()">ADD TO CART</button>
+      <button class="add-cart" id="pdAddBtn" onclick="addPDToCart()">ADD TO CART</button>
     </div>
     ${relatedHTML(i)}
     <div class="pd-sub">🔒 Secure checkout on astaa.store — PayPal, mada &amp; major cards. You will confirm quantity and address in the final step.</div>`;
+  renderPDSelects(p);
   document.getElementById("pdModal").classList.add("open");
   document.getElementById("overlay").classList.add("show");
 }
@@ -635,7 +813,7 @@ function relatedHTML(i){
   if(!rel.length) return "";
   return `<div class="related"><h4>You may also like ✦</h4><div class="rel-row">${rel.map(r=>`
     <div class="rel-card" onclick="event.stopPropagation();openPD(${products.indexOf(r)})">
-      <img src="${r.img}" alt="" loading="lazy">
+      ${r.img?`<img src="${r.img}" alt="" loading="lazy">`:`<div class="no-img">✦</div>`}
       <div class="rt">${r.title}</div>
       <div class="rp">${money(r.price)}</div>
     </div>`).join("")}</div></div>`;
@@ -643,16 +821,20 @@ function relatedHTML(i){
 
 function addToCart(i,q){
   const p = products[i];
-  const ex = cart.find(c => c.id === p.id);
-  if(ex) ex.qty += q; else cart.push({id:p.id,title:p.title,price:p.price,img:p.img,vid:p.vid,handle:p.handle,qty:q});
-  saveCart(); renderCart(); updateCount(); showToast();
+  addToCartRaw({vid:p.vid, title:p.title, vtitle:"", price:p.price, img:p.img}, q);
 }
-function ciChange(id,d){
-  const it = cart.find(c => c.id===id);
-  it.qty = Math.max(1, it.qty + d);
+function addToCartRaw(item,q){
+  const ex = cart.find(c => c.vid === item.vid);
+  if(ex) ex.qty += q;
+  else cart.push(Object.assign({}, item, {qty:q}));
   saveCart(); renderCart(); updateCount();
 }
-function ciRemove(id){ cart = cart.filter(c => c.id!==id); saveCart(); renderCart(); updateCount(); }
+function ciChange(i,d){
+  if(!cart[i]) return;
+  cart[i].qty = Math.max(1, cart[i].qty + d);
+  saveCart(); renderCart(); updateCount();
+}
+function ciRemove(i){ cart.splice(i,1); saveCart(); renderCart(); updateCount(); }
 
 function subtotal(){ return cart.reduce((s,c)=>s+c.price*c.qty,0); }
 function discount(){ if(!promo) return 0; return subtotal()*0.20; }
@@ -671,17 +853,18 @@ function renderCart(){
   if(!cart.length){
     el.innerHTML = `<div class="cart-empty"><span class="ico">✦</span>Your cart is empty.<br><small style="font-size:.8rem">Beautiful things are waiting below.</small></div>`;
   } else {
-    el.innerHTML = cart.map(c => `
+    el.innerHTML = cart.map((c,ci) => `
       <div class="c-item">
-        <img src="${c.img}" alt="">
+        ${c.img?`<img src="${c.img}" alt="">`:`<div class="no-img" style="width:72px;height:72px;border-radius:14px;font-size:1.4rem;color:var(--ice-deep)">✦</div>`}
         <div class="ci-info">
           <h5>${c.title}</h5>
+          ${c.vtitle?`<small style="color:var(--muted);font-size:.72rem">${c.vtitle}</small>`:""}
           <div class="ci-price">${money(c.price)}</div>
           <div class="qty">
-            <button onclick="ciChange(${c.id},-1)">−</button><span>${c.qty}</span><button onclick="ciChange(${c.id},1)">+</button>
+            <button onclick="ciChange(${ci},-1)">−</button><span>${c.qty}</span><button onclick="ciChange(${ci},1)">+</button>
           </div>
         </div>
-        <button class="ci-remove" onclick="ciRemove(${c.id})">remove</button>
+        <button class="ci-remove" onclick="ciRemove(${ci})">remove</button>
       </div>`).join("");
   }
   const sub = subtotal(), disc = discount();
@@ -719,7 +902,13 @@ function closeAll(){
 }
 function showToast(){
   const t = document.getElementById("toast");
+  t.innerHTML = "Added to cart <b>✦</b>";
   t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1800);
+}
+function showToastMsg(msg){
+  const t = document.getElementById("toast");
+  t.innerHTML = msg;
+  t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2200);
 }
 document.addEventListener("keydown", e => { if(e.key==="Escape") closeAll(); });
 
