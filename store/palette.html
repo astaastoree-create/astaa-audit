@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASTAA — Choose Your Crystal Palette</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Segoe UI",system-ui,sans-serif;background:#1c1712;color:#f4ecdd;min-height:100vh;padding:50px 20px}
+  .head{text-align:center;max-width:700px;margin:0 auto 50px}
+  .head .eyebrow{font-size:.72rem;letter-spacing:5px;color:#d9b878;text-transform:uppercase}
+  .head h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(1.8rem,4.5vw,2.8rem);margin:14px 0 12px}
+  .head p{color:#b8ac96;line-height:1.7;font-size:.95rem}
+  .head .step{display:inline-block;margin-top:18px;padding:8px 20px;border-radius:999px;border:1px solid rgba(217,184,120,.4);background:rgba(217,184,120,.1);font-size:.8rem;letter-spacing:1px;color:#e8cf9a}
+
+  .palettes{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:26px;max-width:1180px;margin:0 auto}
+  .p-card{border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.14);background:#241d15;transition:transform .25s, box-shadow .25s}
+  .p-card:hover{transform:translateY(-4px);box-shadow:0 30px 70px rgba(0,0,0,.5)}
+
+  /* mini crystal preview */
+  .mini{position:relative;height:300px;overflow:hidden;cursor:pointer}
+  .mini .scene{position:absolute;inset:0}
+  .mini .orb{position:absolute;border-radius:50%;filter:blur(30px)}
+  .mini .panel{
+    position:absolute;left:18px;right:18px;top:54px;bottom:18px;border-radius:16px;
+    backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);
+    border:1px solid var(--stroke);box-shadow:inset 0 1px 0 rgba(255,255,255,.5), 0 16px 40px rgba(0,0,0,.3);
+    padding:18px;display:flex;flex-direction:column;gap:10px;
+  }
+  .mini .nav{position:absolute;left:18px;right:18px;top:14px;height:34px;border-radius:999px;
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--stroke);display:flex;align-items:center;justify-content:space-between;padding:0 16px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+  .mini .nav b{font-family:Georgia,serif;letter-spacing:2px;font-size:.8rem}
+  .mini .nav span{font-size:.6rem;letter-spacing:1.5px;opacity:.75}
+  .mini .mini-title{font-family:Georgia,serif;font-size:1.15rem;line-height:1.3}
+  .mini .mini-sub{font-size:.68rem;opacity:.75;line-height:1.5}
+  .mini .cardrow{display:flex;gap:10px;margin-top:auto}
+  .mini .pcard{flex:1;border-radius:12px;border:1px solid var(--stroke);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:10px;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+  .mini .pimg{height:52px;border-radius:8px;margin-bottom:8px;background:var(--pimg);border:1px solid var(--stroke)}
+  .mini .pline{height:6px;border-radius:3px;background:currentColor;opacity:.5;margin-bottom:5px}
+  .mini .pline.short{width:60%}
+  .mini .btnrow{display:flex;gap:8px;margin-top:8px}
+  .mini .btn1{flex:1;padding:7px 0;border-radius:999px;font-size:.62rem;letter-spacing:1px;text-align:center;font-weight:700;background:var(--btn);color:var(--btnText);box-shadow:0 6px 16px rgba(0,0,0,.35)}
+  .mini .btn2{flex:1;padding:7px 0;border-radius:999px;font-size:.62rem;letter-spacing:1px;text-align:center;border:1px solid var(--stroke);backdrop-filter:blur(8px)}
+  .mini .price{font-weight:700;font-size:.85rem}
+
+  .p-meta{padding:20px 22px;display:flex;justify-content:space-between;align-items:center;gap:14px}
+  .p-meta h3{font-family:Georgia,serif;font-weight:400;font-size:1.1rem;margin-bottom:4px}
+  .p-meta small{color:#b8ac96;font-size:.76rem;letter-spacing:.5px}
+  .swatches{display:flex;gap:6px}
+  .sw{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.25)}
+  .pick{margin-top:14px;padding:10px;text-align:center;border-radius:10px;border:1px dashed rgba(217,184,120,.4);color:#e8cf9a;font-size:.78rem;letter-spacing:1px}
+
+  /* ================= PALETTES ================= */
+
+  /* 1. Champagne Gold (current) */
+  .pal-champagne .scene{background:linear-gradient(155deg,#e8dcc6 0%,#d4c1a0 30%,#c3ab82 55%,#b39a6e 78%,#8f7a52 100%)}
+  .pal-champagne .o1{width:200px;height:200px;background:#fff3d9;top:-40px;left:-30px}
+  .pal-champagne .o2{width:160px;height:160px;background:#b98d45;bottom:-40px;right:-20px;opacity:.6}
+  .pal-champagne{--stroke:rgba(255,255,255,.45);--btn:linear-gradient(120deg,#e6c88c,#b08d4f);--btnText:#3a2d14;--pimg:linear-gradient(135deg,#f0e2c4,#c8ab74)}
+  .pal-champagne .panel{background:rgba(255,255,255,.16);color:#fdf9f0}
+  .pal-champagne .nav{background:rgba(255,255,255,.16);color:#fdf9f0}
+  .pal-champagne .pcard{background:rgba(255,255,255,.18);color:#fdf9f0}
+
+  /* 2. Emerald Noir */
+  .pal-emerald .scene{background:linear-gradient(155deg,#12241c 0%,#1a3a2c 35%,#1f4a36 60%,#0e1f17 100%)}
+  .pal-emerald .o1{width:200px;height:200px;background:#2f7a55;top:-40px;left:-30px;opacity:.7}
+  .pal-emerald .o2{width:160px;height:160px;background:#d9b878;bottom:-40px;right:-20px;opacity:.45}
+  .pal-emerald{--stroke:rgba(217,184,120,.4);--btn:linear-gradient(120deg,#e6c88c,#b08d4f);--btnText:#1a2a20;--pimg:linear-gradient(135deg,#2f7a55,#0e1f17)}
+  .pal-emerald .panel{background:rgba(30,60,45,.35);color:#eef7f0}
+  .pal-emerald .nav{background:rgba(30,60,45,.4);color:#eef7f0}
+  .pal-emerald .pcard{background:rgba(30,60,45,.4);color:#eef7f0}
+
+  /* 3. Sapphire Ice */
+  .pal-sapphire .scene{background:linear-gradient(155deg,#0e1830 0%,#16264d 35%,#1d3a6e 60%,#0a1226 100%)}
+  .pal-sapphire .o1{width:200px;height:200px;background:#4f7fff;top:-40px;left:-30px;opacity:.55}
+  .pal-sapphire .o2{width:160px;height:160px;background:#bfe0ff;bottom:-40px;right:-20px;opacity:.4}
+  .pal-sapphire{--stroke:rgba(191,224,255,.4);--btn:linear-gradient(120deg,#e8f2ff,#9cc4f5);--btnText:#0e1830;--pimg:linear-gradient(135deg,#3a5fa8,#0a1226)}
+  .pal-sapphire .panel{background:rgba(30,55,110,.35);color:#eef4ff}
+  .pal-sapphire .nav{background:rgba(30,55,110,.4);color:#eef4ff}
+  .pal-sapphire .pcard{background:rgba(30,55,110,.42);color:#eef4ff}
+
+  /* 4. Rose Quartz */
+  .pal-rose .scene{background:linear-gradient(155deg,#f6e8e4 0%,#edd4cf 30%,#e3bcb8 55%,#c99a98 80%,#a87678 100%)}
+  .pal-rose .o1{width:200px;height:200px;background:#fff0ec;top:-40px;left:-30px}
+  .pal-rose .o2{width:160px;height:160px;background:#c78d8f;bottom:-40px;right:-20px;opacity:.55}
+  .pal-rose{--stroke:rgba(255,255,255,.55);--btn:linear-gradient(120deg,#e8b4b0,#c98484);--btnText:#fff;--pimg:linear-gradient(135deg,#f4d9d4,#c78d8f)}
+  .pal-rose .panel{background:rgba(255,255,255,.25);color:#4a2f30}
+  .pal-rose .nav{background:rgba(255,255,255,.3);color:#4a2f30}
+  .pal-rose .pcard{background:rgba(255,255,255,.28);color:#4a2f30}
+
+  /* 5. Obsidian Noir */
+  .pal-obsidian .scene{background:linear-gradient(155deg,#0c0b0e 0%,#17151a 35%,#1e1a22 60%,#08070a 100%)}
+  .pal-obsidian .o1{width:200px;height:200px;background:#d9b878;top:-40px;left:-30px;opacity:.3}
+  .pal-obsidian .o2{width:160px;height:160px;background:#8a6f3d;bottom:-40px;right:-20px;opacity:.35}
+  .pal-obsidian{--stroke:rgba(217,184,120,.45);--btn:linear-gradient(120deg,#f0d9a8,#c9a35a);--btnText:#1a1408;--pimg:linear-gradient(135deg,#3a3320,#141210)}
+  .pal-obsidian .panel{background:rgba(255,255,255,.06);color:#f4ecdd}
+  .pal-obsidian .nav{background:rgba(255,255,255,.08);color:#f4ecdd}
+  .pal-obsidian .pcard{background:rgba(255,255,255,.07);color:#f4ecdd}
+
+  /* 6. Amethyst */
+  .pal-amethyst .scene{background:linear-gradient(155deg,#e9def4 0%,#d4c1e8 30%,#b79fd8 55%,#8d6fb8 80%,#5f4a85 100%)}
+  .pal-amethyst .o1{width:200px;height:200px;background:#f3ecfb;top:-40px;left:-30px}
+  .pal-amethyst .o2{width:160px;height:160px;background:#7a5ba8;bottom:-40px;right:-20px;opacity:.55}
+  .pal-amethyst{--stroke:rgba(255,255,255,.5);--btn:linear-gradient(120deg,#cdb4ec,#9a7cc4);--btnText:#fff;--pimg:linear-gradient(135deg,#e0d2f0,#9a7cc4)}
+  .pal-amethyst .panel{background:rgba(255,255,255,.2);color:#332447}
+  .pal-amethyst .nav{background:rgba(255,255,255,.24);color:#332447}
+  .pal-amethyst .pcard{background:rgba(255,255,255,.22);color:#332447}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div class="eyebrow">ASTAA · Crystal Glass</div>
+  <h1>Choose Your Color Palette</h1>
+  <p>প্রতিটা প্যালেটের নিচে crystal glass ডিজাইনের আসল প্রিভিউ দেওয়া আছে — nav, glass panel, product card, বাটন সবকিছু সেই রঙে।</p>
+  <span class="step">STEP 1 → পছন্দের প্যালেট বেছে নিন · STEP 2 → আমাকে নম্বর/নামটা বলুন</span>
+</div>
+
+<div class="palettes">
+
+  <div class="p-card pal-champagne">
+    <div class="mini" title="Click to choose">
+      <div class="scene"><div class="orb o1"></div><div class="orb o2"></div></div>
+      <div class="nav"><b>ASTAA</b><span>HOME · SHOP · CART</span></div>
+      <div class="panel">
+        <div class="mini-title">Quietly luxurious</div>
+        <div class="mini-sub">Champagne warmth — the current crystal edition.</div>
+        <div class="cardrow">
+          <div class="pcard"><div class="pimg"></div><div class="pline"></div><div class="pline short"></div><div class="price">$24.99</div></div>
+          <div class="pcard"><div class="pimg"></div><div class="pline"></div><div class="pline short"></div><div class="price">$19.99</div></div>
+        </div>
+        <div class="btnrow"><div class="btn1">ADD TO CART</div><div class="btn2">DETAILS</div></div>
+      </div>
+    </div>
+    <div class="p-meta">
+      <div><h3>1 · Champagne Gold</h3><small>Current — warm ivory + deep gold</small></div>
+      <div class="swatches"><span class="sw" style="background:#e8dcc6"></span><span class="sw" style="background:#c3ab82"></span><span class="sw" style="background:#b08d4f"></span></div>
+    </div>
+    <div class="pick">✦ এটা বেছে নিলে লিখুন: "1"</div>
+  </div>
+
+  <div class="p-card pal-emerald">
+    <div class="mini" title="Click to choose">
+      <div class="scene"><div class="orb o1"></div><div class="orb o2"></div></div>
+      <div class="nav"><b>ASTAA</b><span>HOME · SHOP · CART</span></div>
+      <div class="panel">
+        <div class="mini-title">Emerald &amp; gold</div>
+        <div class="mini-sub">Deep emerald glass with champagne gold accents.</div>
+        <div class="cardrow">
+          <div class="pcard"><div class="pimg"></div><div class="pline"></div><div class="pline short"></div><div class="price">$24.99</div></div>
+          <div class="pcard"><div class="pimg"></div><div class="pline"></div><div class="pline short"></div><div class="price">$19.99</div></div>
+        </div>
+        <div class="btnrow"><div class="btn1">ADD TO CART</div><div class="btn2">DETAILS</div></div>
+      </div>
+    </div>
+    <div class="p-meta">
+      <div><h3>2 · Emerald Noir</h3><small>Deep green + gold — rich &amp; premium</small></div>
+      <div class="swatches"><span class="sw" style="background:#1a3a2c"></span><span class="sw" style="background:#2f7a55"></span><span class="sw" style="background:#d9b878"></span></div>
+    </div>
+    <div class="pick">✦ এটা বেছে নিলে লিখুন: "2"</div>
+  </div>
+
+  <div class="p-card pal-sapphire">
+    <div class="mini" title="Click to choose">
+      <div class="scene"><div class="orb o1"></div><div class="orb o2"></div></div>
+      <div class="nav"><b>ASTAA</b><span>HOME · SHOP · CART</span></div>
+      <div class="panel">
+        <div class="mini-title">Sapphire ice</div>
+        <div class="mini-sub">Deep blue crystal with frosted silver light.</div>
+        <div class="cardrow">
+          <div class="pcard"><div class="pimg"></div><div class="pline"></div><div class="pline short"></div><div class="price">$24.99</div></div>
+          <div class="pcard"><div class="pimg"></div><div class="pline"></div><div class="pline short"></div><div class="price">$19.99</div></div>
+        </div>
+        <div class="btnrow"><div class="btn1">ADD TO CART</div><div class="btn2">DETAILS</div></div>
+      </div>
+    </div>
+    <div class="p-meta">
+      <div><h3>3 · Sapphire Ice</h3><small>Royal blue + ice silver — futuristic tech look</small></div>
+      <div class="swatches"><span class="sw" style="background:#16264d"></span><span class="sw" style="background:#3a5fa8"></span><span class="sw" style="background:#bfe0ff"></span></div>
+    </div>
+    <div class="pick">✦ এটা বেছে নিলে লিখুন: "3"</div>
+  </div>
+
+  <div class="p-card pal-rose">
+    <div class="mini" title="Click to choose">
+      <div class="scene"><div class="orb o1"></div><div class="orb o2"></div></div>
+      <div class="nav"><b>ASTAA</b><span>HOME · SHOP · CART</span></div>
+      <div class="panel">
+        <div class="mini-title">Rose quartz</div>
+        <div class="mini-sub">Soft blush crystal — beauty &amp; fashion friendly.</div>
+        <div class="cardrow">
+          <div class="pcard"><div class="pimg"></div><div class="pline"></div><div class="pline short"></div><div class="price">$24.99</div></div>
+          <div class="pcard"><div class="pimg"></div><div class="pline"></div><div class="pline short"></div><div class="price">$19.99</div></div>
+        </div>
+        <div class="btnrow"><div class="btn1">ADD TO CART</div><div class="btn2">DETAILS</div></div>
+      </div>
+    </div>
+    <div class="p-meta">
+      <div><h3>4 · Rose Quartz</h3><small>Blush pink + rose gold — soft &amp; feminine</small></div>
+      <div class="swatches"><span class="sw" style="background:#f6e8e4"></span><span class="sw" style="background:#e3bcb8"></span><span class="sw" style="background:#c78d8f"></span></div>
+    </div>
+    <div class="pick">✦ এটা বেছে নিলে লিখুন: "4"</div>
+  </div>
+
+  <div class="p-card pal-obsidian">
+    <div class="mini" title="Click to choose">
+      <div class="scene"><div class="orb o1"></div><div class="orb o2"></div></div>
+      <div class="nav"><b>ASTAA</b><span>HOME · SHOP · CART</span></div>
+      <div class="panel">
+        <div class="mini-title">Obsidian noir</div>
+        <div class="mini-sub">Black crystal with luminous gold — bold luxury.</div>
+        <div class="cardrow">
+          <div class="pcard"><div class="pimg"></div><div class="pline"></div><div class="pline short"></div><div class="price">$24.99</div></div>
+          <div class="pcard"><div class="pimg"></div><div class="pline"></div><div class="pline short"></div><div class="price">$19.99</div></div>
+        </div>
+        <div class="btnrow"><div class="btn1">ADD TO CART</div><div class="btn2">DETAILS</div></div>
+      </div>
+    </div>
+    <div class="p-meta">
+      <div><h3>5 · Obsidian Noir</h3><small>Black glass + bright gold — boldest look</small></div>
+      <div class="swatches"><span class="sw" style="background:#0c0b0e"></span><span class="sw" style="background:#1e1a22"></span><span class="sw" style="background:#f0d9a8"></span></div>
+    </div>
+    <div class="pick">✦ এটা বেছে নিলে লিখুন: "5"</div>
+  </div>
+
+  <div class="p-card pal-amethyst">
+    <div class="mini" title="Click to choose">
+      <div class="scene"><div class="orb o1"></div><div class="orb o2"></div></div>
+      <div class="nav"><b>ASTAA</b><span>HOME · SHOP · CART</span></div>
+      <div class="panel">
+        <div class="mini-title">Amethyst light</div>
+        <div class="mini-sub">Violet crystal with lavender glow — dreamy &amp; modern.</div>
+        <div class="cardrow">
+          <div class="pcard"><div class="pimg"></div><div class="pline"></div><div class="pline short"></div><div class="price">$24.99</div></div>
+          <div class="pcard"><div class="pimg"></div><div class="pline"></div><div class="pline short"></div><div class="price">$19.99</div></div>
+        </div>
+        <div class="btnrow"><div class="btn1">ADD TO CART</div><div class="btn2">DETAILS</div></div>
+      </div>
+    </div>
+    <div class="p-meta">
+      <div><h3>6 · Amethyst</h3><small>Violet + lavender — dreamy &amp; modern</small></div>
+      <div class="swatches"><span class="sw" style="background:#e9def4"></span><span class="sw" style="background:#b79fd8"></span><span class="sw" style="background:#5f4a85"></span></div>
+    </div>
+    <div class="pick">✦ এটা বেছে নিলে লিখুন: "6"</div>
+  </div>
+
+</div>
+
+<script>
+document.querySelectorAll('.mini').forEach(m => m.addEventListener('click', () => {
+  const name = m.closest('.p-card').querySelector('h3').textContent;
+  alert('আপনি বেছে নিয়েছেন: ' + name + '\n\nএখন চ্যাটে শুধু লিখুন: "' + name.split('·')[1].trim() + '" — আমি পুরো সাইট সেই রঙে বদলে দেব।');
+}));
+</script>
+</body>
+</html>
