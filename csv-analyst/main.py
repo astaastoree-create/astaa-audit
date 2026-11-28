@@ -415,6 +415,11 @@ async def fetch_drive_csv(file_id: str) -> tuple[str, str]:
     structured = getattr(result, "structured_content", None)
     if isinstance(structured, dict):
         title = str(structured.get("title") or "")
+    if not title and raw.strip().startswith("{"):
+        try:
+            title = str(json.loads(raw.strip()).get("title") or "")
+        except json.JSONDecodeError:
+            pass
     return csv_text, title
 
 
@@ -556,7 +561,7 @@ How you work:
 
 
 agent = agents.Agent(
-    model="mistral-large-4",
+    model="mistral-medium-latest",
     name="csv-analyst",
     instructions=INSTRUCTIONS,
     tools=[load_csv, describe_columns, filter_rows, group_by_aggregate],
