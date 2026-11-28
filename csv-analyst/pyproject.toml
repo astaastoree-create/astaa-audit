@@ -1,0 +1,16 @@
+[project]
+name = "csv-analyst"
+version = "0.1.0"
+description = "Conversational data analyst agent over CSV files in Google Drive"
+requires-python = ">=3.12"
+dependencies = [
+    "mistralai-agents==1.1.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
